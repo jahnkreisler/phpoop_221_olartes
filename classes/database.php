@@ -8,12 +8,12 @@ class database
  
     function check($username,$password){
         $con = $this->opencon();
-        $query = "SELECT * from users WHERE user='".$username. "'&&pass='".$password."'";
+        $query = "SELECT * from users WHERE user_name='".$username. "'&&user_pass='".$password."'";
         return $con->query($query)->fetch();
     }
     function signup($firstname, $lastname, $birthday, $sex, $username, $password){
         $con = $this->opencon();
-        $query = $con->prepare("SELECT user FROM users WHERE user= ?");
+        $query = $con->prepare("SELECT user FROM user_name WHERE user_name= ?");
         $query->execute([$username]);
         $existingUser = $query->fetch();
 
@@ -21,7 +21,7 @@ class database
             return false;
         }
 
-        return $con->prepare("INSERT INTO users (firstname, lastname, birthday, sex, user, pass) VALUES (?, ?, ?, ?, ?, ?)")
+        return $con->prepare("INSERT INTO users (firstname, lastname, birthday, sex, user_name, user_pass) VALUES (?, ?, ?, ?, ?, ?)")
         ->execute([$firstname, $lastname, $birthday, $sex, $username, $password]);
     }
         function signupUser($firstname, $lastname, $birthday, $sex, $name, $pass) {
@@ -34,7 +34,7 @@ class database
                 return false;
             }
        
-            $con->prepare("INSERT INTO users (firstname, lastname, birthday, sex, user, pass) VALUES (?, ?, ?, ?, ?, ?)")->execute([$firstname, $lastname, $birthday, $sex, $name, $pass]);
+            $con->prepare("INSERT INTO users (firstname, lastname, birthday, sex, user_name, user_pass) VALUES (?, ?, ?, ?, ?, ?)")->execute([$firstname, $lastname, $birthday, $sex, $name, $pass]);
             return $con->lastInsertId();
         }
        
@@ -45,7 +45,7 @@ class database
     }
         function view (){
             $con = $this->opencon();
-            return $con -> query("SELECT users.user_id, users.firstname, users.lastname, users.birthday, users.sex, users.user, CONCAT(user_address.user_street,' ', user_address.user_barangay,' ', user_address.user_city,' ', user_address.user_province) AS Address FROM user_address INNER JOIN users ON users.user_id = user_address.user_id;") -> fetchAll();
+            return $con -> query("SELECT users.user_id, users.firstname, users.lastname, users.birthday, users.sex, users.user_name, CONCAT(user_address.user_street,' ', user_address.user_barangay,' ', user_address.user_city,' ', user_address.user_province) AS Address FROM user_address INNER JOIN users ON users.user_id = user_address.user_id;") -> fetchAll();
     }
     function delete($id){
         try{
@@ -66,7 +66,7 @@ class database
         try{
             $con = $this->opencon();
             $query=$con->prepare("SELECT
-            users.user_id, users.firstname, users.lastname, users.birthday, users.sex, users.user, users.pass, user_address.user_street, user_address.user_barangay, user_address.user_city, user_address.user_province FROM user_address INNER JOIN users ON user_address.user_id = users.user_id WHERE users.user_id=?");
+            users.user_id, users.firstname, users.lastname, users.birthday, users.sex, users.user_name, users.user_pass, user_address.user_street, user_address.user_barangay, user_address.user_city, user_address.user_province FROM user_address INNER JOIN users ON user_address.user_id = users.user_id WHERE users.user_id=?");
             $query->execute([$id]);
             return $query->fetch();
             }
@@ -77,7 +77,7 @@ class database
     function updateUser($id, $firstName, $lastName, $birthday, $sex, $username, $password) {
         try{
             $con = $this->opencon();
-            $query= $con->prepare("UPDATE users SET firstname=?, lastname=?, birthday=?, sex=?, user=?, pass=? WHERE user_id=?");
+            $query= $con->prepare("UPDATE users SET firstname=?, lastname=?, birthday=?, sex=?, user_name=?, user_pass=? WHERE user_id=?");
             return $query->execute([$firstName, $lastName, $birthday, $sex, $username, $password, $id]);
             //Update Succesful
         } catch (PDOException $e) {

@@ -4,20 +4,20 @@ require_once('classes/database.php');
 
 $con = new database();
 session_start();
-if (isset($_SESSION['username'])){
+if (isset($_SESSION['user_name'])){
   header('location:index.php');
 }
 
 
 if (isset($_POST['Login'])) {
-  $username = $_POST['user'];
-  $password = $_POST['pass'];
+  $username = $_POST['user_name'];
+  $password = $_POST['user_pass'];
   $result = $con->check($username, $password);
 
 
 if ($result) {
-  if ($result['user'] == $_POST['user'] && $result['pass'] == $_POST['pass']) {
-    $_SESSION['username'] = $result['user'];
+  if ($result['user_name'] == $_POST['user_name'] && $result['user_pass'] == $_POST['user_pass']) {
+    $_SESSION['user_name'] = $result['user_name'];
   
     header('location:index.php');
     
@@ -51,12 +51,12 @@ if ($result) {
   <form method="post">
     <div class="form-group">
       <label for="username">Username:</label>
-      <input type="text" class="form-control" name="user" placeholder="What is your name?">
+      <input type="text" class="form-control" name="user_name" placeholder="What is your name?">
     </div>
 
     <div class="form-group">
       <label for="password">Password:</label>
-      <input type="password" class="form-control" name="pass" placeholder="What is your password">
+      <input type="password" class="form-control" name="user_pass" placeholder="What is your password">
     </div>
 
     <div class="container">

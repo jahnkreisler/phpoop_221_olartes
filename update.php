@@ -5,7 +5,7 @@ $con = new database();
  
 
 session_start();
-if (empty($_SESSION['username'])) {
+if (empty($_SESSION['user_name'])) {
   header('location:login.php');
 }
  
