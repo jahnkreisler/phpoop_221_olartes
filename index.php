@@ -3,8 +3,9 @@
     require_once('classes/database.php');
 
     $con = new database();
+
     session_start();
-    if(empty($_SESSION['username'])) {
+    if(empty($_SESSION['user_name'])) {
         header('location:login.php');
     }
 
@@ -63,7 +64,7 @@
 <td><?php echo $row['lastname'];?></td>
 <td><?php echo $row['birthday'];?></td>
 <td><?php echo $row['sex'];?></td>
-<td><?php echo $row['user'];?></td>
+<td><?php echo $row['user_name'];?></td>
 <td><?php echo ucwords ($row['Address'])?></td>
 <td>
 
